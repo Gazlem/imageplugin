@@ -1,0 +1,27 @@
+plugins {
+
+    id 'org.jetbrains.kotlin.jvm' version '1.5.30'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.5.30'
+    id 'net.mamoe.mirai-console' version '2.10.0-RC2'
+
+}
+
+group = 'org.fenglin'
+version = '1.0-SNAPSHOT'
+
+repositories {
+
+    maven { url 'https://maven.aliyun.com/repository/public' }
+    mavenCentral()
+}
+
+dependencies {
+
+    implementation("xyz.cssxsh.mirai:mirai-selenium-plugin:2.0.5")
+}
+
+mirai{
+    jvmTarget = JavaVersion.VERSION_11
+}
+
+
