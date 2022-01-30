@@ -4,6 +4,7 @@ import net.mamoe.mirai.console.command.CommandSender;
 import net.mamoe.mirai.console.command.java.JCompositeCommand;
 import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.message.data.At;
+import net.mamoe.mirai.message.data.ForwardMessageBuilder;
 import net.mamoe.mirai.message.data.PlainText;
 import net.mamoe.mirai.utils.ExternalResource;
 import org.imageplugin;
@@ -55,7 +56,9 @@ public class WebTools extends JCompositeCommand {
             }
             driver.quit();
         } catch (Exception e) {
-            sender.sendMessage("查询错误："+e.getMessage());
+            ForwardMessageBuilder builder = new ForwardMessageBuilder(sender.getSubject());
+            builder.add(sender.getUser(),new PlainText(e.getMessage()));
+            sender.sendMessage(builder.build());
             e.printStackTrace();
         }
     }
@@ -82,7 +85,9 @@ public class WebTools extends JCompositeCommand {
             sender.sendMessage(new PlainText("ip地址查询完毕").plus(new At(sender.getUser().getId())).plus(image1));
             driver.quit();
         } catch (Exception e) {
-            sender.sendMessage("查询错误："+e.getMessage());
+            ForwardMessageBuilder builder = new ForwardMessageBuilder(sender.getSubject());
+            builder.add(sender.getUser(),new PlainText(e.getMessage()));
+            sender.sendMessage(builder.build());
             e.printStackTrace();
         }
     }
@@ -111,9 +116,50 @@ public class WebTools extends JCompositeCommand {
             sender.sendMessage(new PlainText("ECO查询完毕").plus(new At(sender.getUser().getId())).plus(image1));
             driver.quit();
         } catch (Exception e) {
-            sender.sendMessage("查询错误："+e.getMessage());
+            ForwardMessageBuilder builder = new ForwardMessageBuilder(sender.getSubject());
+            builder.add(sender.getUser(),new PlainText(e.getMessage()));
+            sender.sendMessage(builder.build());
             e.printStackTrace();
         }
+    }
+    @SubCommand("ping")
+    public void ping(CommandSender sender, String url) {
+        //
+        try{
+            sender.sendMessage("正在查询。。。请稍等");
+            RemoteWebDriver driver = MiraiSeleniumPlugin.INSTANCE.driver(config);
+            driver.get("http://mping.chinaz.com/?host="+url);
+            long current=System.currentTimeMillis();
+            while (true){
+                if (SeleniumToolKt.isReady(driver)){
+                    break;
+                }
+                if (current - System.currentTimeMillis()>100000){
+                    sender.sendMessage("网页加载超时");
+                    break;
+                }
+            }
+            JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+            while (true){
+                String is= (String) jsExecutor.executeScript(" var a = document.getElementById('progressBar').innerHTML;return a");
+                if (is.equals("100%")){
+                    break;
+                }
+            }
+            sender.sendMessage("读取完毕！准备图片发送！");
+            WebElement a = driver.findElement(By.xpath("/html/body/div[6]/div[4]"));
+            File screenshot = a.getScreenshotAs(OutputType.FILE);
+            ExternalResource res = ExternalResource.create(screenshot);
+            net.mamoe.mirai.message.data.Image image1 =  Contact.uploadImage(sender.getSubject(),res);
+            sender.sendMessage(new PlainText("ping查询完毕").plus(new At(sender.getUser().getId())).plus(image1));
+            driver.quit();
+        } catch (Exception e) {
+            ForwardMessageBuilder builder = new ForwardMessageBuilder(sender.getSubject());
+            builder.add(sender.getUser(),new PlainText(e.getMessage()));
+            sender.sendMessage(builder.build());
+            e.printStackTrace();
+        }
+
     }
 
 }
