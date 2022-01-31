@@ -4,6 +4,7 @@ import net.mamoe.mirai.console.command.CommandSender;
 import net.mamoe.mirai.console.command.java.JSimpleCommand;
 import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.message.data.At;
+import net.mamoe.mirai.message.data.ForwardMessageBuilder;
 import net.mamoe.mirai.message.data.PlainText;
 import net.mamoe.mirai.utils.ExternalResource;
 import org.imageplugin;
@@ -44,7 +45,9 @@ public class PhantomTools extends JSimpleCommand {
             sender.sendMessage(new PlainText("网站"+driver.getTitle()+"，截图已完成！").plus(new At(sender.getUser().getId())).plus(image1));
             driver.quit();
         } catch (Exception e) {
-            sender.sendMessage("截图发送错误："+e.getMessage());
+            ForwardMessageBuilder builder = new ForwardMessageBuilder(sender.getSubject());
+            builder.add(sender.getBot(),new PlainText(e.getMessage()));
+            sender.sendMessage(builder.build());
             e.printStackTrace();
         }
 
