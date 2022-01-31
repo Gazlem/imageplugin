@@ -12,7 +12,7 @@
 
 请确保以上文档熟知阅读。
 
-请确保mcl版本在[2.10.0-RC2](https://github.com/mamoe/mirai/releases/tag/v2.10.0-RC2)及其以上。
+请确保mirai-core版本在[2.10.0-RC2](https://github.com/mamoe/mirai/releases/tag/v2.10.0-RC2)及其以上。
 
 请确保前置插件的安装以及版本在[Release v2.0.5 ](https://github.com/cssxsh/mirai-selenium-plugin/releases/tag/v2.0.5)及以上
 
