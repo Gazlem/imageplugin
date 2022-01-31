@@ -11,7 +11,7 @@ import xyz.cssxsh.mirai.plugin.MiraiSeleniumPlugin;
 import xyz.cssxsh.selenium.RemoteWebDriverConfig;
 import java.io.File;
 
-public final class imageplugin extends JavaPlugin {
+public final class imageplugin extends JavaPlugin implements Runnable{
     public static final imageplugin INSTANCE = new imageplugin();
     private RemoteWebDriverConfig config = RemoteWebDriverConfig.INSTANCE;
 
@@ -29,17 +29,19 @@ public final class imageplugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-//        MiraiSeleniumPlugin.INSTANCE.chromium("97.0.4692.99");
         CommandManager.INSTANCE.registerCommand(new PhantomTools(),true);
         CommandManager.INSTANCE.registerCommand(new WebTools(),true);
         if (MiraiSeleniumPlugin.INSTANCE.setup(true)){
             getLogger().info("网页截图插件已加载");
         }else{
             getLogger().info("初始化失败,准备下载");
-            MiraiSeleniumPlugin.INSTANCE.chromium("98");
-            getLogger().info("下载完成！");
+            new Thread(new imageplugin()).start();
         }
-
-
+    }
+    @Override
+    public void run() {
+        getLogger().info("开始下载");
+        MiraiSeleniumPlugin.INSTANCE.chromium("98");
+        getLogger().info("下载完成！");
     }
 }
