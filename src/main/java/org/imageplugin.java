@@ -5,11 +5,9 @@ import net.mamoe.mirai.console.plugin.jvm.JavaPlugin;
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescriptionBuilder;
 import org.Command.PhantomTools;
 import org.Command.WebTools;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.remote.RemoteWebDriver;
+import org.Command.medal;
 import xyz.cssxsh.mirai.plugin.MiraiSeleniumPlugin;
 import xyz.cssxsh.selenium.RemoteWebDriverConfig;
-import java.io.File;
 
 public final class imageplugin extends JavaPlugin implements Runnable{
     public static final imageplugin INSTANCE = new imageplugin();
@@ -31,6 +29,8 @@ public final class imageplugin extends JavaPlugin implements Runnable{
     public void onEnable() {
         CommandManager.INSTANCE.registerCommand(new PhantomTools(),true);
         CommandManager.INSTANCE.registerCommand(new WebTools(),true);
+        CommandManager.INSTANCE.registerCommand(new medal(),true);
+        //
         if (MiraiSeleniumPlugin.INSTANCE.setup(true)){
             getLogger().info("网页截图插件已加载");
         }else{
