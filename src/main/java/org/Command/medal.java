@@ -91,7 +91,7 @@ public class medal extends JCompositeCommand {
         Runnable runnable=()->{
             sender.sendMessage("正在截图。。。请稍等");
             RemoteWebDriver driver = MiraiSeleniumPlugin.INSTANCE.driver(config);
-            driver.get("https://www.beijing2022.cn/");
+            driver.get("https://results.beijing2022.cn/beijing-2022/olympic-games/zh/results/all-sports/medal-standings.htm");
             long current=System.currentTimeMillis();
             while (true){
                 if (SeleniumToolKt.isReady(driver)){
@@ -104,8 +104,7 @@ public class medal extends JCompositeCommand {
             }
             sender.sendMessage("访问网站成功，截图开始！");
             try {
-                ForwardMessageBuilder seedbuilder = new ForwardMessageBuilder(sender.getSubject());
-                WebElement info = driver.findElement(By.className("medals-table"));
+                WebElement info = driver.findElement(By.xpath("/html/body/main/div/div[1]/div[1]/div[1]/div[2]"));
                 File screenshot = info.getScreenshotAs(OutputType.FILE);
                 ExternalResource res = ExternalResource.create(screenshot);
                 net.mamoe.mirai.message.data.Image image1 =  Contact.uploadImage(sender.getSubject(),res);
